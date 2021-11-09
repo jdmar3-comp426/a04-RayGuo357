@@ -61,7 +61,7 @@ app.patch("/app/update/user/:id", (req, res) => {
 	const stmt = db.prepare('UPDATE userinfo SET user = COALESCE(?,user), pass = COALESCE(?,pass) WHERE id = ?');
 	const info = stmt.run(req.body.user, md5(req.body.pass), req.params.id);
 	if(info.changes === 1) {
-		res.status(200).json({"message":"1 record updated: ID " + info.lastInsertRowid + " (200)"})
+		res.status(200).json({"message":"1 record updated: ID " + req.params.id + " (200)"})
 	} else {
 		res.status(404).json({"message":"User does not exist. (404)"})
 	}
@@ -72,7 +72,7 @@ app.delete("/app/delete/user/:id", (req, res) => {
 	const stmt = db.prepare('DELETE FROM userinfo WHERE id = ?');
 	const info = stmt.run(req.params.id);
 	if(info.changes === 1) {
-		res.status(200).json({"message":"1 record deleted: ID " + info.lastInsertRowid + " (200)"})
+		res.status(200).json({"message":"1 record deleted: ID " + req.params.id + " (200)"})
 	} else {
 		res.status(404).json({"message":"User does not exist. (404)"})
 	}
