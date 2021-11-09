@@ -34,7 +34,7 @@ app.post("/app/new", (req, res) => {
 	const stmt = db.prepare('INSERT INTO userinfo (user, pass) VALUES (?, ?)');
 	const info = stmt.run(req.body.user, md5(req.body.pass));
 	if(info.changes === 1) {
-		res.status(201).json({"message":"Successfully added user! (201)"})
+		res.status(201).json({"message":"1 record created: ID " + info.lastInsertRowid + " (201)"})
 	} else {
 		res.status(409).json({"message":"User exists. (409)"})
 	}
@@ -61,7 +61,7 @@ app.patch("/app/update/user/:id", (req, res) => {
 	const stmt = db.prepare('UPDATE userinfo SET user = COALESCE(?,user), pass = COALESCE(?,pass) WHERE id = ?');
 	const info = stmt.run(req.body.user, md5(req.body.pass), req.params.id);
 	if(info.changes === 1) {
-		res.status(200).json({"message":"Successfully updated user! (200)"})
+		res.status(200).json({"message":"1 record updated: ID " + info.lastInsertRowid + " (200)"})
 	} else {
 		res.status(404).json({"message":"User does not exist. (404)"})
 	}
@@ -72,7 +72,7 @@ app.delete("/app/delete/user/:id", (req, res) => {
 	const stmt = db.prepare('DELETE FROM userinfo WHERE id = ?');
 	const info = stmt.run(req.params.id);
 	if(info.changes === 1) {
-		res.status(200).json({"message":"Successfully deleted user! (200)"})
+		res.status(200).json({"message":"1 record deleted: ID " + info.lastInsertRowid + " (200)"})
 	} else {
 		res.status(404).json({"message":"User does not exist. (404)"})
 	}
